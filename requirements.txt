@@ -1,0 +1,14 @@
+matplotlib
+plotly
+notebook
+pandas
+pyarrow
+requests
+seaborn
+python-dotenv
+scikit-learn
+mlflow
+xgboost
+lightgbm
+confluent-kafka
+hopsworks
