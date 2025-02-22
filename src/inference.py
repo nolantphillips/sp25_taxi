@@ -7,6 +7,7 @@ from hsfs.feature_store import FeatureStore
 
 import src.config as config
 from src.data_utils import transform_ts_data_info_features
+from src.data_utils import transform_ts_data_info_features_and_target
 
 
 def get_hopsworks_project() -> hopsworks.project.Project:
@@ -53,7 +54,7 @@ def load_batch_of_features_from_store(
     # Sort data by location and time
     ts_data.sort_values(by=["pickup_location_id", "pickup_hour"], inplace=True)
 
-    features = transform_ts_data_info_features(
+    features, _ = transform_ts_data_info_features_and_target(
         ts_data, window_size=24 * 28, step_size=23
     )
 

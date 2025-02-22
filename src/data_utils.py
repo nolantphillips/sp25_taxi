@@ -378,7 +378,11 @@ def transform_ts_data_info_features_and_target(
             feature_columns = [
                 f"{feature_col}_t-{window_size - i}" for i in range(window_size)
             ]
-            all_columns = feature_columns + ["target", "location_id", "pickup_hour"]
+            all_columns = feature_columns + [
+                "target",
+                "pickup_location_id",
+                "pickup_hour",
+            ]
             transformed_df = pd.DataFrame(rows, columns=all_columns)
 
             # Append the transformed data to the list
@@ -396,7 +400,7 @@ def transform_ts_data_info_features_and_target(
     final_df = pd.concat(transformed_data, ignore_index=True)
 
     # Extract features (including pickup_hour), targets, and keep the complete DataFrame
-    features = final_df[feature_columns + ["pickup_hour", "location_id"]]
+    features = final_df[feature_columns + ["pickup_hour", "pickup_location_id"]]
     targets = final_df["target"]
 
     return features, targets
