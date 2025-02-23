@@ -13,3 +13,7 @@ lightgbm
 confluent-kafka
 hopsworks
 hsml
+streamlit
+geopandas
+streamlit_folium
+branca
