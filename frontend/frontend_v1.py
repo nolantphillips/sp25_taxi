@@ -300,6 +300,7 @@ option = st.selectbox(
 
 option_fig = plot_prediction(
     features=features[features["pickup_location_id"] == option],
-    prediction=predictions[predictions["pickup_location_id"] == option],
+    prediction=predictions[predictions["zone"] == option],
 )
+
 st.plotly_chart(option_fig, theme="streamlit", use_container_width=True)
