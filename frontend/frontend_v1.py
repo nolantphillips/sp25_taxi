@@ -289,3 +289,13 @@ for location_id in top10:
         prediction=predictions[predictions["pickup_location_id"] == location_id],
     )
     st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+
+option = st.selectbox(
+    label="Select Location...", options=predictions["pickup_location_id"].tolist()
+)
+
+option_fig = plot_prediction(
+    features=features[features["pickup_location_id"] == option],
+    prediction=predictions[predictions["pickup_location_id"] == option],
+)
+st.plotly_chart(option_fig, theme="streamlit", use_container_width=True)
