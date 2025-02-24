@@ -278,7 +278,7 @@ with st.spinner(text="Plot predicted rides demand"):
     progress_bar.progress(4 / N_STEPS)
 
 nyc_zones = gpd.read_file(shapefile_path)
-zones_dict = dict(zip(nyc_zones["zone"], nyc_zones["LocationID"]))
+zones_dict = dict(zip(nyc_zones["zone"], nyc_zones["OBJECTID"]))
 reverse_dict = dict(zip(zones_dict.values(), zones_dict.keys()))
 
 pickup_ids = predictions["pickup_location_id"].to_list()
