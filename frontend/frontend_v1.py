@@ -280,6 +280,7 @@ with st.spinner(text="Plot predicted rides demand"):
 nyc_zones = gpd.read_file(shapefile_path)
 zones_dict = dict(zip(nyc_zones["zone"], nyc_zones["OBJECTID"]))
 reverse_dict = dict(zip(zones_dict.values(), zones_dict.keys()))
+reverse_dict[56] = "Corona"
 
 pickup_ids = predictions["pickup_location_id"].to_list()
 names = []
