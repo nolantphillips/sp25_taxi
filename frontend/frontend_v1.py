@@ -291,16 +291,13 @@ for location_id in top10:
     st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
 nyc_zones = gpd.read_file(shapefile_path)
-zones_dict = dict(zip(nyc_zones["LocationID"], nyc_zones["zone"]))
-predictions["zone"] = zones_dict[predictions["pickup_location_id"]]
+zones_dict = dict(zip(nyc_zones["zone"], nyc_zones["LocationID"]))
 
-option = st.selectbox(
-    label="Select Location...", options=predictions["zone"].tolist().sort()
-)
+option = st.selectbox(label="Select Location...", options=zones_dict.keys().sort())
 
 option_fig = plot_prediction(
-    features=features[features["pickup_location_id"] == option],
-    prediction=predictions[predictions["zone"] == option],
+    features=features[features["pickup_location_id"] == zones_dict[option]],
+    prediction=predictions[predictions["pickup_location_id"] == zones_dict[option]],
 )
 
 st.plotly_chart(option_fig, theme="streamlit", use_container_width=True)
