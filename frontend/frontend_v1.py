@@ -293,7 +293,7 @@ for location_id in top10:
 nyc_zones = gpd.read_file(shapefile_path)
 zones_dict = dict(zip(nyc_zones["zone"], nyc_zones["LocationID"]))
 
-option = st.selectbox(label="Select Location...", options=zones_dict.keys().sort())
+option = st.selectbox(label="Select Location...", options=sorted(zones_dict.keys()))
 
 option_fig = plot_prediction(
     features=features[features["pickup_location_id"] == zones_dict[option]],
