@@ -277,7 +277,21 @@ with st.spinner(text="Plot predicted rides demand"):
     st.sidebar.write("Finished plotting taxi rides demand")
     progress_bar.progress(4 / N_STEPS)
 
-st.dataframe(predictions.sort_values("predicted_demand", ascending=False).head(10))
+nyc_zones = gpd.read_file(shapefile_path)
+zones_dict = dict(zip(nyc_zones["zone"], nyc_zones["LocationID"]))
+reverse_dict = dict(zip(zones_dict.values(), zones_dict.keys()))
+
+pickup_ids = predictions["pickup_location_id"].to_list()
+names = []
+for id in pickup_ids:
+    names.append(reverse_dict[id])
+predictions["zone"] = names
+
+st.dataframe(
+    predictions[["zone", "pickup_location_id", "predicted_demand", "pickup_hour"]]
+    .sort_values("predicted_demand", ascending=False)
+    .head(10)
+)
 top10 = (
     predictions.sort_values("predicted_demand", ascending=False)
     .head(10)["pickup_location_id"]
@@ -289,9 +303,6 @@ for location_id in top10:
         prediction=predictions[predictions["pickup_location_id"] == location_id],
     )
     st.plotly_chart(fig, theme="streamlit", use_container_width=True)
-
-nyc_zones = gpd.read_file(shapefile_path)
-zones_dict = dict(zip(nyc_zones["zone"], nyc_zones["LocationID"]))
 
 option = st.selectbox(label="Select Location...", options=sorted(zones_dict.keys()))
 
