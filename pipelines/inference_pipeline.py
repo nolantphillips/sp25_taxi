@@ -29,7 +29,7 @@ ts_data = feature_view.get_batch_data(
 )
 ts_data = ts_data[ts_data.pickup_hour.between(fetch_data_from, fetch_data_to)]
 ts_data.sort_values(["pickup_location_id", "pickup_hour"]).reset_index(drop=True)
-ts_data["pickup_hour"] = ts_data["pickup_hour"].dt.tz_localize("US/Eastern")
+ts_data["pickup_hour"] = ts_data["pickup_hour"].dt.tz_convert("US/Eastern")
 
 from src.data_utils import transform_ts_data_info_features_and_target
 
