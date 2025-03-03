@@ -116,7 +116,7 @@ def fetch_next_hour_predictions():
 
 
 def fetch_predictions(hours):
-    current_hour = (datetime.now() - timedelta(hours=hours)).floor("h")
+    current_hour = (pd.Timestamp.now() - timedelta(hours=hours)).floor("h")
 
     fs = get_feature_store()
     fg = fs.get_feature_group(name=config.FEATURE_GROUP_MODEL_PREDICTION, version=1)
