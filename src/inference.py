@@ -97,8 +97,8 @@ def load_metrics_from_registry(version=None):
 
 def fetch_next_hour_predictions():
     # Get current time and round up to next hour
-    now = datetime.now()
-    next_hour = (now + timedelta(hours=1)).replace(minute=0, second=0, microsecond=0)
+    now = datetime.now() - timedelta(hours=5)
+    next_hour = (now - timedelta(hours=4)).replace(minute=0, second=0, microsecond=0)
 
     fs = get_feature_store()
     fg = fs.get_feature_group(name=config.FEATURE_GROUP_MODEL_PREDICTION, version=1)
