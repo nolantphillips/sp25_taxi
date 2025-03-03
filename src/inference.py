@@ -97,7 +97,7 @@ def load_metrics_from_registry(version=None):
 
 def fetch_next_hour_predictions():
     # Get current time and round up to next hour
-    now = datetime.now(pytz.timezone("US/Eastern"))
+    now = datetime.now()
     next_hour = (now + timedelta(hours=1)).replace(minute=0, second=0, microsecond=0)
 
     fs = get_feature_store()
@@ -115,7 +115,7 @@ def fetch_next_hour_predictions():
 
 
 def fetch_predictions(hours):
-    current_hour = (pd.Timestamp.now("US/Eastern") - timedelta(hours=hours)).floor("h")
+    current_hour = (datetime.now() - timedelta(hours=hours)).floor("h")
 
     fs = get_feature_store()
     fg = fs.get_feature_group(name=config.FEATURE_GROUP_MODEL_PREDICTION, version=1)
@@ -126,7 +126,7 @@ def fetch_predictions(hours):
 
 
 def fetch_hourly_rides(hours):
-    current_hour = (pd.Timestamp.now("US/Eastern") - timedelta(hours=hours)).floor("h")
+    current_hour = (pd.Timestamp.now() - timedelta(hours=hours)).floor("h")
 
     fs = get_feature_store()
     fg = fs.get_feature_group(name=config.FEATURE_GROUP_NAME, version=1)
@@ -140,7 +140,7 @@ def fetch_hourly_rides(hours):
 
 
 def fetch_days_data(days):
-    current_date = pd.to_datetime(datetime.now("US/Eastern"))
+    current_date = pd.to_datetime(datetime.now())
     fetch_data_from = current_date - timedelta(days=(365 + days))
     fetch_data_to = current_date - timedelta(days=365)
     print(fetch_data_from, fetch_data_to)
