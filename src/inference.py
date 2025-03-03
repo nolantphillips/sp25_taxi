@@ -105,6 +105,7 @@ def fetch_next_hour_predictions():
     df = fg.read()
 
     df["pickup_hour"] = df["pickup_hour"].dt.tz_convert("US/Eastern")
+    df["pickup_hour"] = df["pickup_hour"].dt.tz_localize(None)
     # Then filter for next hour in the DataFrame
     df = df[df["pickup_hour"] == next_hour]
 
