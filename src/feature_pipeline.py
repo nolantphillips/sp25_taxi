@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 # Step 1: Get the current date and time (timezone-aware)
-current_date = pd.to_datetime(datetime.now("US/Eastern")).ceil("h")
+current_date = pd.to_datetime(datetime.now()).ceil("h").tz_localize("US/Eastern")
 logger.info(f"Current date and time (EST): {current_date}")
 
 # Step 2: Define the data fetching range
