@@ -12,7 +12,7 @@ from src.inference import (
 # Get the current datetime64[us, Etc/UTC]
 # for number in range(22, 24 * 29):
 # current_date = pd.Timestamp.now(tz="Etc/UTC") - timedelta(hours=number)
-current_date = pd.Timestamp.now(tz="Etc/UTC")
+current_date = pd.Timestamp.now(tz="US/Eastern")
 feature_store = get_feature_store()
 
 # read time-series data from the feature store
@@ -29,7 +29,7 @@ ts_data = feature_view.get_batch_data(
 )
 ts_data = ts_data[ts_data.pickup_hour.between(fetch_data_from, fetch_data_to)]
 ts_data.sort_values(["pickup_location_id", "pickup_hour"]).reset_index(drop=True)
-ts_data["pickup_hour"] = ts_data["pickup_hour"].dt.tz_localize(None)
+ts_data["pickup_hour"] = ts_data["pickup_hour"].dt.tz_localize("US/Eastern")
 
 from src.data_utils import transform_ts_data_info_features_and_target
 
