@@ -9,6 +9,8 @@ import src.config as config
 from src.data_utils import transform_ts_data_info_features
 from src.data_utils import transform_ts_data_info_features_and_target
 
+import pytz
+
 
 def get_hopsworks_project() -> hopsworks.project.Project:
     return hopsworks.login(
@@ -94,47 +96,51 @@ def load_metrics_from_registry(version=None):
 
 
 def fetch_next_hour_predictions():
-    # Get current UTC time and round up to next hour
-    now = datetime.now(timezone.utc)
+    # Get current time and round up to next hour
+    now = datetime.now(pytz.timezone("US/Eastern"))
     next_hour = (now + timedelta(hours=1)).replace(minute=0, second=0, microsecond=0)
 
     fs = get_feature_store()
     fg = fs.get_feature_group(name=config.FEATURE_GROUP_MODEL_PREDICTION, version=1)
     df = fg.read()
+
+    df["pickup_hour"] = df["pickup_hour"].dt.tz_convert("US/Eastern")
     # Then filter for next hour in the DataFrame
     df = df[df["pickup_hour"] == next_hour]
 
-    print(f"Current UTC time: {now}")
+    print(f"Current EST time: {now}")
     print(f"Next hour: {next_hour}")
     print(f"Found {len(df)} records")
     return df
 
 
 def fetch_predictions(hours):
-    current_hour = (pd.Timestamp.now(tz="Etc/UTC") - timedelta(hours=hours)).floor("h")
+    current_hour = (pd.Timestamp.now("US/Eastern") - timedelta(hours=hours)).floor("h")
 
     fs = get_feature_store()
     fg = fs.get_feature_group(name=config.FEATURE_GROUP_MODEL_PREDICTION, version=1)
 
     df = fg.filter((fg.pickup_hour >= current_hour)).read()
-
+    df["pickup_hour"] = df["pickup_hour"].dt.tz_convert("US/Eastern")
     return df
 
 
 def fetch_hourly_rides(hours):
-    current_hour = (pd.Timestamp.now(tz="Etc/UTC") - timedelta(hours=hours)).floor("h")
+    current_hour = (pd.Timestamp.now("US/Eastern") - timedelta(hours=hours)).floor("h")
 
     fs = get_feature_store()
     fg = fs.get_feature_group(name=config.FEATURE_GROUP_NAME, version=1)
 
     query = fg.select_all()
     query = query.filter(fg.pickup_hour >= current_hour)
+    df = query.read()
+    df["pickup_hour"] = df["pickup_hour"].dt.tz_convert("US/Eastern")
 
-    return query.read()
+    return df
 
 
 def fetch_days_data(days):
-    current_date = pd.to_datetime(datetime.now(timezone.utc))
+    current_date = pd.to_datetime(datetime.now("US/Eastern"))
     fetch_data_from = current_date - timedelta(days=(365 + days))
     fetch_data_to = current_date - timedelta(days=365)
     print(fetch_data_from, fetch_data_to)

@@ -17,3 +17,6 @@ streamlit
 geopandas
 streamlit_folium
 branca
+scipy
+statsmodels
+pmdarima
